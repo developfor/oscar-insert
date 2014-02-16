@@ -1,18 +1,26 @@
 (function(window, document, undefined){
 
+var dataInsertPie = function(){
+
     var margin = {top: 0, right: 0, bottom: 0, left: 0},
     width = 253 - margin.left - margin.right,
     height = 220 - margin.top - margin.bottom,
     padding = 0,
-    radius = Math.min(width, height) / 2;
-
-   var color = d3.scale.linear()
-      .domain([0, 9])
-      .range(['#1ba68c', '#97BF3F']); 
+    radius = Math.min(width, height) / 2,
+    outerR = radius - padding,
+    innterR = 0,
+    domainStart = 0,
+    color1 = '#1ba68c',
+    color2 = '#97BF3F',
+    highlight = '#F2522E',
+    bgColor = 'white',
+    textColor = 'black',
+    textColorHighlight = 'white',
+    toggleSpeed = 300;
 
     var arc = d3.svg.arc()
-        .outerRadius(radius - 10)
-        .innerRadius(0);
+        .outerRadius(outerR)
+        .innerRadius(innterR);
 
     var pie = d3.layout.pie()
         .sort(null)
@@ -24,138 +32,151 @@
     .append("g")
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    d3.json("../data/oscar.json", function(error, data) {
+    d3.json("../data/oscar2.json", function(error, data) {
         if (error) { 
             console.log("there is an error loading data " + error); //Log the error.
         } 
         else {
-            update(data);
+            var dataLength = data.length;
+            update(data, dataLength);
             clickInfo();
         }
     });
 
-var update = function(data){
+    var update = function(data, dataLength){
 
-    var currentColor,
-    colorArray = [],
-    picked;
+        var color = d3.scale.linear()
+        .domain([domainStart, dataLength])
+        .range([color1, color2]); 
+
+        var currentColor,
+        colorArray = [],
+        picked;
     
-    data.forEach(function(d) {
-        d.gross_num = +d.gross_num;
-    });
-
-    var g = svg.selectAll(".arc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arc");
-
-    g.append("path")
-        .attr("d", arc)
-        .style("fill", function(d) { colorArray.push(color(d.data.id)); return color(d.data.id); })
-        .attr("class", "pie")
-        .attr("id", function(d){ return d.data.tag})
-        .on("mouseover", function(d) {
-
-            picked = this.id;
-            picked = "." + picked;
-
-            $(picked).css('background-color', '#F2522E')
-                .css('color', 'white');
-            
-            currentColor = d3.select(this).style('fill');
-
-            d3.select(this).style("fill", "#F2522E");
-        })
-        .on("mouseout", function(){
-            d3.select(this).style("fill", currentColor);
-            $(picked).css('background-color', 'white')
-                .css('color', 'black');
+        data.forEach(function(d) {
+            d.gross_num = +d.gross_num;
         });
 
-    tabulate(data, colorArray);
-}
+        var g = svg.selectAll(".arc")
+            .data(pie(data))
+            .enter()
+        .append("g")
+            .attr("class", "arc");
 
-var tabulate = function (data, colors) {
-    var cTable = $('#table-body');
+        g.append("path")
+            .attr("d", arc)
+            .style("fill", function(d) { 
+                colorArray.push(color(d.data.id)); 
+                return color(d.data.id); 
+            })
+            .attr("class", "pie")
+            .attr("id", function(d){ return d.data.tag})
+            .on("mouseover", function(d) {
+                picked = "." + this.id;
 
-    $(cTable).empty()
+                $(picked).css('background-color', highlight)
+                    .css('color', 'white');
+            
+                currentColor = d3.select(this).style('fill');
 
-    var table = $('<table></table>');
+                d3.select(this).style("fill", highlight);
+            })
+            .on("mouseout", function(){
+                d3.select(this).style("fill", currentColor);
+                $(picked).css('background-color', bgColor)
+                    .css('color', textColor);
+            });
 
-    $.each(data, function(i){
-        var row = $('<tr></tr>').addClass('ui-menu-item').addClass(data[i].tag);
+        tabulate(data, colorArray);
+    }
 
-        var col = $('<td></td>').addClass('one' ).text(" ").css("background-color", colors[i]);
-        row.append(col);
+    var tabulate = function (data, colors) {
+        var cTable = $('#table-body');
 
-        col = $('<td></td>').addClass('two').text(data[i].name);
-        row.append(col);
+        $(cTable).empty()
 
-        col = $('<td></td>').addClass('three').text(data[i].gross_dollar);
-        row.append(col);
+        var table = $('<table></table>');
 
-        table.append(row);
+        $.each(data, function(i){
 
-    })
+            var row = $('<tr></tr>').addClass('ui-menu-item').addClass(data[i].tag);
 
-    $('#table-body').append(table);
-    overTable(data);
-}
+            var col = $('<td></td>').text(" ").css("background-color", colors[i]);
+            row.append(col);
 
-var overTable = function(data){
-    var currentColor,
-    dPicked;
-    $('.ui-menu-item').on('mouseover', function(d){
-        dPicked = $(this).attr("class").split(' ')[1];
-        dPicked = d3.select("#" + dPicked);
-        currentColor = dPicked.style('fill');
+            col = $('<td></td>').text(data[i].name);
+            row.append(col);
+
+            col = $('<td></td>').text("$" + numberWithCommas(data[i].gross_num));  
+            row.append(col);
+
+            table.append(row);
+        })
+
+        $('#table-body').append(table);
+        overTable(data);
+    }
+
+    var overTable = function(data){
+        var currentColor,
+        dPicked;
+        $('.ui-menu-item').on('mouseover', function(d){
+            dPicked = $(this).attr("class").split(' ')[1];
+            dPicked = d3.select("#" + dPicked);
+            currentColor = dPicked.style('fill');
         
-        $(this).css('background-color', '#F2522E')
-                .css('color', 'white');
+            $(this).css('background-color', highlight)
+                    .css('color', 'white');
 
-        dPicked.style('fill', "#F2522E")
-  }).on('mouseout', function(d){
-        dPicked.style('fill', currentColor);
-        $(this).css('background-color', 'white')
-                .css('color', 'black');
-  })
-}
+            dPicked.style('fill', highlight)
+        }).on('mouseout', function(d){
+            dPicked.style('fill', currentColor);
+            $(this).css('background-color', textColorHighlight)
+                .css('color', textColor);
+        })
+    }
 
+    function clickInfo(){
+        var last;
+        $('#info-button, #embed-button, #embed-close, #info-close').on('click', function(){
+            var current = $(this).attr("id").split('-')[0];
+            current += "-text";
+            toggles(current, last)
+            last = current;
+        })
+    }
 
-function clickInfo(){
-var last;
-$('#info-button, #embed-button, #embed-close, #info-close').on('click', function(){
-    console.log('hi')
-  var current = $(this).attr("id").split('-')[0];
-  current += "-text";
-  toggles(current, last)
-  last = current;
-})
-}//END OF CLICKINFO
+    function toggles(picked, last){
 
-function toggles(picked, last){
+        $('#country-info ul').hide();
 
-  $('#country-info ul').hide();
+        if($('#info-dropdown').is(':visible')){
+            if(picked === last){
+                $('#info-dropdown').slideToggle(toggleSpeed);
+            }else{
 
-if($('#info-dropdown').is(':visible')){
+                $('#info-dropdown').slideToggle(toggleSpeed, function(){
+                    $('#info-text').hide();
+                    $('#embed-text').hide();
+                    $('#'+picked).show();
+                    $('#info-dropdown').slideToggle(toggleSpeed);
+                });
+            }
+        }else{
+            $('#info-text').hide();
+            $('#embed-text').hide();
+            $('#'+picked).show();
+            $('#info-dropdown').slideToggle(toggleSpeed);
+        }
+    }
 
-  if(picked === last){
-    $('#info-dropdown').slideToggle(300);
-  }else{
+    function numberWithCommas(x) {
+        var parts = x.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+    }
+};
 
-    $('#info-dropdown').slideToggle(300, function(){
-      $('#info-text').hide();
-        $('#embed-text').hide();
-        $('#'+picked).show();
-        $('#info-dropdown').slideToggle(300);
-      });
-  }
-}else{
-  $('#info-text').hide();
-     $('#embed-text').hide();
-     $('#'+picked).show();
-     $('#info-dropdown').slideToggle(300);
-}
-}
+dataInsertPie();
 
 })(this, document);
