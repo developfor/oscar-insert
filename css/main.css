@@ -30,6 +30,11 @@ html, body{
   stroke: #fff;
 }
 
+.arc{
+
+	stroke: #fff;
+}
+
 p{
   font-size: 12px;
 }
