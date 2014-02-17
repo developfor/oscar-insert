@@ -10,13 +10,21 @@ var dataInsertPie = function(){
     outerR = radius - padding,
     innterR = 0,
     domainStart = 0,
-    color1 = '#1ba68c',
-    color2 = '#97BF3F',
+    color1 = '#453020',
+    color2 = '#5F381E',
+    color3 = '#885134',
+    color4 = '#A74327',
+    color5 = '#CF794D',
+    color6 = '#EEA37C',
+    color7 = '#E5AB63',
+    color8 = '#EAA961',
+    color9 = '#EBC177',
     highlight = '#F2522E',
     bgColor = 'white',
     textColor = 'black',
     textColorHighlight = 'white',
-    toggleSpeed = 300;
+    toggleSpeed = 300,
+    tableHeight = 140;
 
     var arc = d3.svg.arc()
         .outerRadius(outerR)
@@ -25,6 +33,9 @@ var dataInsertPie = function(){
     var pie = d3.layout.pie()
         .sort(null)
         .value(function(d) { return d.gross_num; });
+
+    var color = d3.scale.ordinal()
+    .range([color1, color2, color3, color4, color5, color6, color7, color8, color9]);
 
     var svg = d3.select("#chart").append("svg")
         .attr("width", width)
@@ -45,9 +56,9 @@ var dataInsertPie = function(){
 
     var update = function(data, dataLength){
 
-        var color = d3.scale.linear()
-        .domain([domainStart, dataLength])
-        .range([color1, color2]); 
+        // var color = d3.scale.linear()
+        // .domain([domainStart, dataLength])
+        // .range([color1, color2]); 
 
         var currentColor,
         colorArray = [],
@@ -119,6 +130,8 @@ var dataInsertPie = function(){
         $(cTable).empty()
 
         var table = $('<table></table>');
+
+        $(table).css('height', tableHeight);
 
         $.each(data, function(i){
 
