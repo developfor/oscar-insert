@@ -2,8 +2,8 @@
 
 var dataInsertPie = function(){
 
-    var margin = {top: 0, right: 0, bottom: 0, left: 0},
-    width = 253 - margin.left - margin.right,
+    var margin = {top: 0, right: 5, bottom: 0, left: 5},
+    width = 270 - margin.left - margin.right,
     height = 220 - margin.top - margin.bottom,
     padding = 0,
     radius = Math.min(width, height) / 2,
