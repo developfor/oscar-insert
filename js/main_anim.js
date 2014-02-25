@@ -2,6 +2,7 @@
 
 var dataInsertPie = function(){
 
+
     var margin = {top: 0, right: 5, bottom: 0, left: 5},
     width = 270 - margin.left - margin.right,
     height = 220 - margin.top - margin.bottom,
@@ -19,7 +20,7 @@ var dataInsertPie = function(){
     color7 = '#E5AB63',
     color8 = '#EAA961',
     color9 = '#EBC177',
-    highlight = '#F2522E',
+    highlight = '#2E5879',
     bgColor = 'white',
     textColor = 'black',
     textColorHighlight = 'white',
@@ -52,6 +53,24 @@ var dataInsertPie = function(){
             update(data, dataLength);
             clickInfo();
         }
+
+        ////////////////////////////////
+        // button click select highlight 
+        //////////////////////////////// 
+        $("#gross_num").addClass("button-select");
+
+        $("#budget_num").on("click", function(){
+            $(".button").removeClass("button-select");
+            $("#budget_num").addClass("button-select");
+        });
+
+        $("#gross_num").on("click", function(){
+            $(".button").removeClass("button-select");
+            $("#gross_num").addClass("button-select");
+        });
+
+
+
     });
 
     var update = function(data, dataLength){
