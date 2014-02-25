@@ -28,7 +28,7 @@
 	"tag": "he6",
 	"name": "Her", 
 	"gross_num": 23115183, 
-	"budget_num": 0},
+	"budget_num": 23000000},
 	{"id": 7,
 	"tag": "ne7",
 	"name": "Nebraska", 
@@ -39,10 +39,10 @@
 	"name": "Philomena",
 	"tag": "ph", 
 	"gross_num": 75591652, 
-	"budget_num": 0},
+	"budget_num": 12000000},
 	{"id": 9,
 	"tag": "ww9",
 	"name": "The Wolf of Wall Street ", 
-	"gross_num": 75591652,
+	"gross_num": 305347838,
 	"budget_num": 100000000}
 ]
