@@ -70,16 +70,9 @@ var dataInsertPie = function(){
             $(".button").removeClass("button-select");
             $("#gross_num").addClass("button-select");
         });
-
-
-
     });
 
     var update = function(data, dataLength){
-
-        // var color = d3.scale.linear()
-        // .domain([domainStart, dataLength])
-        // .range([color1, color2]); 
 
         var currentColor,
         colorArray = [],
@@ -89,8 +82,6 @@ var dataInsertPie = function(){
         data.forEach(function(d) {
             d.gross_num = +d.gross_num;
         });
-
-
 
           var path = svg.datum(data).selectAll("path")
       .data(pie)
@@ -201,23 +192,33 @@ var dataInsertPie = function(){
         })
     }
 
+    var isAnimate = 1;
+
     function clickInfo(){
+
+
         var last;
         $('#info-button, #embed-button, #embed-close, #info-close').on('click', function(){
-            var current = $(this).attr("id").split('-')[0];
-            current += "-text";
-            toggles(current, last)
-            last = current;
+            if(isAnimate === 1){
+                isAnimate = 0;
+                var current = $(this).attr("id").split('-')[0];
+                current += "-text";
+                toggles(current, last)
+                last = current;
+            }
         })
     }
 
-    function toggles(picked, last){
 
-        $('#country-info ul').hide();
+   
+
+    function toggles(picked, last){
 
         if($('#info-dropdown').is(':visible')){
             if(picked === last){
-                $('#info-dropdown').slideToggle(toggleSpeed);
+                $('#info-dropdown').slideToggle(toggleSpeed, function(){
+                    isAnimate = 1;
+                });
             }else{
 
                 $('#info-dropdown').slideToggle(toggleSpeed, function(){
@@ -225,13 +226,16 @@ var dataInsertPie = function(){
                     $('#embed-text').hide();
                     $('#'+picked).show();
                     $('#info-dropdown').slideToggle(toggleSpeed);
+                    isAnimate = 1;
                 });
             }
         }else{
             $('#info-text').hide();
             $('#embed-text').hide();
             $('#'+picked).show();
-            $('#info-dropdown').slideToggle(toggleSpeed);
+            $('#info-dropdown').slideToggle(toggleSpeed, function(){
+                isAnimate = 1;
+            });
         }
     }
 
