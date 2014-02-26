@@ -16,6 +16,18 @@ html, body{
 
 }
 
+.wrapper-outer{
+ 	display: table; 
+ 	position: absolute; 
+ 	height: 100%; 
+ 	width: 100%;
+ }
+
+.wrapper-middle{
+ 	display: table-cell; 
+ 	vertical-align: middle;
+}
+
 .wrapper{
 	margin: 0 auto;
 	width:270px;
@@ -25,6 +37,7 @@ html, body{
 	border-radius: 5px; 
 	border: 2px solid #666;
 	position: relative;
+	background-color: #FFF;
 }
 
 .title{
@@ -104,7 +117,7 @@ table td:first-child{
 
 #logo{
 	float: left;
-	background: url("../images/developfor.jpg")no-repeat;
+	background: url("../images/logo.png")no-repeat;
 	background-size:91px auto;
 	background-repeat:no-repeat;
 	height: 19px;
@@ -137,30 +150,6 @@ table td:first-child{
 	background-position: -42px -0.5px;
 }
 
-#embed-button{
-	float: left;
-	cursor: pointer;
-	position: absolute;
-	left:50px;
-	bottom: 38px;
-	font-style: bold;
-
-	cursor: pointer;
-	outline: none; 
-	background-color:#EBEBEB;
-
-	border:1px solid #666;
-	color:#000000;
-
-	font-size:14px;
-	font-weight:normal;
-	font-style:normal;
-	height:40px;
-	line-height:10px;
-	width:80px;
-	text-decoration:none;
-
-}
 
 #info-close, #embed-close{
 	cursor: pointer;
@@ -221,9 +210,6 @@ table td:first-child{
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-
-}
-#embed-button p{
 	font-size: 12px;
 	color: white;
 	font-style: normal;

@@ -29,7 +29,7 @@ var dataInsertPie = function(){
     tableHeight = 140;
     //variables for info toggles
     var toggleSpeed = 300,
-    isAnimate = 1;;
+    isAnimate = 1;
 
     //d3 set up for pie chart
     var arc = d3.svg.arc()
@@ -50,7 +50,7 @@ var dataInsertPie = function(){
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     //import data
-    d3.json("../data/oscar.json", function(error, data) {
+    d3.json("data/oscar.json", function(error, data) {
         if (error) { 
             console.log("there is an error loading data " + error); //Log the error.
         } 
